@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mysql-master:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: mydatabase
+    ports:
+      - "3307:3306"
+    networks:
+      - mysql-network
+    volumes:
+      - mysql-master-data:/var/lib/mysql
+
+  mysql-slave:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+    depends_on:
+      - mysql-master
+    networks:
+      - mysql-network
+    volumes:
+      - mysql-slave-data:/var/lib/mysql
+
+volumes:
+  mysql-master-data:
+  mysql-slave-data:
+
+networks:
+  mysql-network:
